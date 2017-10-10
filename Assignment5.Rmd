@@ -1,0 +1,123 @@
+---
+title: "Assignment 5"
+author: "Kimaya Rane, Ryan Nguyen, Rod Vasquez"
+date: "10/3/2017"
+output: html_document
+---
+
+```{r}
+library(readxl)
+tallestbuildings=read_excel("tallestbuildings.xlsx")
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+## Number of buildings there are there in each city represented in the dataset 
+
+```{r}
+colnames(tallestbuildings)
+head(tallestbuildings)
+names(tallestbuildings)[2]="Building"
+names(tallestbuildings)
+```
+
+```{r}
+colnames(tallestbuildings)
+```
+
+```{r}
+tallestbuildings %>% group_by(City) %>% summarise(cnt = n()) %>% arrange(desc(cnt))
+```
+
+## Different cities plotted in order of the mean height (in feet) of buildings in a city
+
+```{r}
+colnames(tallestbuildings)
+head(tallestbuildings)
+names(tallestbuildings)[6]="Height"
+names(tallestbuildings)[5]="Height.Ft"
+names(tallestbuildings)
+
+```
+
+```{r}
+tallestbuildings %>% group_by(City) %>%
+  summarise(Mean.Height=mean(Height)) %>%
+  ggplot(aes(x= reorder(City,-Mean.Height),y=Mean.Height)) +
+  geom_bar(stat = "identity") + coord_flip()
+```
+
+
+## Number of buildings there are in each country represented in the dataset 
+
+```{r}
+library(countrycode)
+```
+
+```{r}
+tallestbuildings=tallestbuildings %>% separate(City,c("City","Country"),sep="[:punct:]")
+```
+
+```{r}
+tallestbuildings$Country = countrycode(tallestbuildings$Country,"iso2c","country.name")
+```
+
+```{r}
+tallestbuildings%>%group_by(Country) %>% summarise(numBuildings = n()) %>%
+    arrange(desc(numBuildings)) %>%
+    ggplot(aes(y=numBuildings, x=reorder(Country, numBuildings))) +
+    geom_bar(stat = "identity", fill = "red") + coord_flip()
+```
+
+## Mean height (in feet) of buildings in each country
+
+```{r}
+tallestbuildings %>% group_by(Country) %>%
+  summarise(Mean.Height=mean(Height)) %>%
+  ggplot(aes(x= reorder(Country,Mean.Height),y=Mean.Height)) +
+  geom_bar(stat = "identity", fill = "purple") + coord_flip()
+```
+
+## Adding color to the plot above 
+
+```{r}
+tallestbuildings %>% group_by(Country) %>%
+  summarise(Mean.Height=mean(Height)) %>%
+  ggplot(aes(x= reorder(Country,Mean.Height),y=Mean.Height)) +
+  geom_bar(stat = "identity") + coord_flip()
+
+ bldgct = tallestbuildings %>% group_by(Country) %>% summarise(Building_Count = n(),  Mean.Height=mean(Height))
+    head(bldgct)
+    
+    bldgct %>%
+  ggplot(aes(x= reorder(Country,Mean.Height),y=Mean.Height, fill = as.factor(Building_Count))) +
+  geom_bar(stat = "identity",position="dodge") + coord_flip() + scale_fill_brewer(palette="Paired")
+```
+
+
+## Mean heights (in feet) of buildings that are used for different purposes
+
+```{r}
+ bldgn = tallestbuildings %>% group_by(Use) %>%
+  summarise(Mean.Height=mean(Height))
+  head(bldgn)
+  
+  bldgn %>%
+  ggplot(aes(x= reorder(Use,Mean.Height),y=Mean.Height)) +
+  geom_bar(stat = "identity",position="dodge", fill = "blue") + coord_flip()
+```
+
+## Summary
+In conclusion, Dubai has the largets number of buildings at 18. However, Mecca has the largest average of tall buildings out of all the cities. Next Taiwan has is the country with the largest average for building height. Lastly, office/residential/hotel are the type of buildings that have the largest average height.
+
+
+
+
+
+
+
+
+
