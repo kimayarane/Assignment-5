@@ -47,9 +47,8 @@ names(tallestbuildings)
 tallestbuildings %>% group_by(City) %>%
   summarise(Mean.Height=mean(Height)) %>%
   ggplot(aes(x= reorder(City,-Mean.Height),y=Mean.Height)) +
-  geom_bar(stat = "identity") + coord_flip()
+  geom_bar(stat = "identity") + coord_flip() + labs(list(title = "Cities Ranked by Mean Height", x = "Cities", y = "Mean Height"))
 ```
-
 
 ## Number of buildings there are in each country represented in the dataset 
 
@@ -69,7 +68,7 @@ tallestbuildings$Country = countrycode(tallestbuildings$Country,"iso2c","country
 tallestbuildings%>%group_by(Country) %>% summarise(numBuildings = n()) %>%
     arrange(desc(numBuildings)) %>%
     ggplot(aes(y=numBuildings, x=reorder(Country, numBuildings))) +
-    geom_bar(stat = "identity", fill = "red") + coord_flip()
+    geom_bar(stat = "identity", fill = "red") + coord_flip() + labs(list(title = "Number of Buildings per Country", x = "Country", y = "Number of Buildings"))
 ```
 
 ## Mean height (in feet) of buildings in each country
@@ -78,7 +77,7 @@ tallestbuildings%>%group_by(Country) %>% summarise(numBuildings = n()) %>%
 tallestbuildings %>% group_by(Country) %>%
   summarise(Mean.Height=mean(Height)) %>%
   ggplot(aes(x= reorder(Country,Mean.Height),y=Mean.Height)) +
-  geom_bar(stat = "identity", fill = "purple") + coord_flip()
+  geom_bar(stat = "identity", fill = "purple") + coord_flip() + labs(list(title = "Mean Height(ft) of Buildings by Country", x = "Country", y = "Mean Height"))
 ```
 
 ## Adding color to the plot above 
@@ -87,14 +86,14 @@ tallestbuildings %>% group_by(Country) %>%
 tallestbuildings %>% group_by(Country) %>%
   summarise(Mean.Height=mean(Height)) %>%
   ggplot(aes(x= reorder(Country,Mean.Height),y=Mean.Height)) +
-  geom_bar(stat = "identity") + coord_flip()
+  geom_bar(stat = "identity") + coord_flip() + labs(list(title = "Mean Height(ft) of Buildings by Country", x = "Country", y = "Mean Height"))
 
  bldgct = tallestbuildings %>% group_by(Country) %>% summarise(Building_Count = n(),  Mean.Height=mean(Height))
     head(bldgct)
     
     bldgct %>%
   ggplot(aes(x= reorder(Country,Mean.Height),y=Mean.Height, fill = as.factor(Building_Count))) +
-  geom_bar(stat = "identity",position="dodge") + coord_flip() + scale_fill_brewer(palette="Paired")
+  geom_bar(stat = "identity",position="dodge") + coord_flip() + scale_fill_brewer(palette="Paired") + labs(list(title = "Mean Height(ft) of Buildings by Country", x = "Country", y = "Mean Height"))
 ```
 
 
@@ -107,7 +106,7 @@ tallestbuildings %>% group_by(Country) %>%
   
   bldgn %>%
   ggplot(aes(x= reorder(Use,Mean.Height),y=Mean.Height)) +
-  geom_bar(stat = "identity",position="dodge", fill = "blue") + coord_flip()
+  geom_bar(stat = "identity",position="dodge", fill = "blue") + coord_flip() + labs(list(title = "Mean Height(ft) of Different Purposes", x = "Uses", y = "Mean Height"))
 ```
 
 ## Summary
